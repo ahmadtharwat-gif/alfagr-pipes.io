@@ -66,17 +66,18 @@
 
         /* keep the same .logo element (background-image approach) so we don't touch logic */
         .logo {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 14px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            object-fit: cover;
             transition: var(--transition);
             background-image: url('alfagr_logo.jpg'); /* ensure file alfagr_logo.jpg exists next to index.html */
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
             display: block;
-            animation: zoomIn 1.2s cubic-bezier(.2,.9,.3,1);
+            animation: zoomIn 1.5s cubic-bezier(.2,.9,.3,1);
         }
 
         .logo:hover { transform: scale(1.05); }
@@ -850,5 +851,6 @@
     </script>
 </body>
 </html>
+
 
 
