@@ -793,13 +793,101 @@ function calculateResults() {
             thicknessResult.textContent = pipeInfo.thickness.toFixed(pipeInfo.thickness_unit === 'inch' ? 2 : 2);
             thicknessUnit.textContent = pipeInfo.thickness_unit;
             weightPerMeterResult.textContent = pipeInfo.weight.toFixed(3);
+function populateDiameters() {
+    const selectedType = pipeTypeSelect.value;
+    diameterList.innerHTML = '';
+    pressureList.innerHTML = '';
+    diameterInput.value = '';
+    pressureInput.value = '';
+    specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
+    calculateResults();
+    
+    if (!selectedType) {
+        return;
+    }
+
+    const allDiameters = new Set();
+    for (const pressure in pipeData[selectedType].data) {
+        pipeData[selectedType].data[pressure].forEach(item => {
+            allDiameters.add(`${item.diameter} ${item.diameter_unit}`);
+        });
+    }
+    
+    const sortedDiameters = Array.from(allDiameters).sort((a, b) => {
+        const aValue = parseFloat(a.split(' ')[0]);
+        const bValue = parseFloat(b.split(' ')[0]);
+        return aValue - bValue;
+    });
+    
+    sortedDiameters.forEach(d => {
+        const option = document.createElement('option');
+        option.value = d;
+        diameterList.appendChild(option);
+    });
+}
+---
+function populatePressures() {
+    const selectedType = pipeTypeSelect.value;
+    // هنا يتم تحويل القيمة المدخلة من "200 mm" إلى الرقم 200
+    const selectedDiameterWithUnit = diameterInput.value;
+    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
+
+    pressureList.innerHTML = '';
+    pressureInput.value = '';
+    calculateResults();
+    
+    if (!selectedType || isNaN(diameterValue)) {
+        return;
+    }
+
+    const availablePressures = new Set();
+    for (const pressure in pipeData[selectedType].data) {
+        // البحث عن القيمة الرقمية فقط
+        const hasDiameter = pipeData[selectedType].data[pressure].some(item => item.diameter === diameterValue);
+        if (hasDiameter) {
+            availablePressures.add(parseFloat(pressure));
+        }
+    }
+    
+    const sortedPressures = Array.from(availablePressures).sort((a, b) => b - a);
+
+    sortedPressures.forEach(p => {
+        const option = document.createElement('option');
+        option.value = `${p} bar`;
+        pressureList.appendChild(option);
+    });
+}
+---
+function calculateResults() {
+    const selectedType = pipeTypeSelect.value;
+    const selectedDiameterWithUnit = diameterInput.value;
+    const selectedPressureWithUnit = pressureInput.value;
+    
+    // هنا يتم تحويل القيمتين إلى أرقام
+    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
+    const pressureValue = parseFloat(selectedPressureWithUnit.split(' ')[0]);
+    const quantity = parseFloat(quantityInput.value) || 0;
+
+    thicknessResult.textContent = '--';
+    weightPerMeterResult.textContent = '--';
+    totalWeightResult.textContent = '--';
+    totalWeightUnit.textContent = 'kg';
+    thicknessUnit.textContent = 'mm';
+
+    if (selectedType && !isNaN(diameterValue) && !isNaN(pressureValue)) {
+        // البحث باستخدام القيم الرقمية
+        const pipeInfo = pipeData[selectedType].data[pressureValue]?.find(item => item.diameter === diameterValue);
+        
+        if (pipeInfo) {
+            thicknessResult.textContent = pipeInfo.thickness.toFixed(pipeInfo.thickness_unit === 'inch' ? 2 : 2);
+            thicknessUnit.textContent = pipeInfo.thickness_unit;
+            weightPerMeterResult.textContent = pipeInfo.weight.toFixed(3);
             
             const totalWeightKg = pipeInfo.weight * quantity;
             updateTotalWeightDisplay(totalWeightKg);
         }
     }
 }
-
         function updateTotalWeightDisplay(totalWeightKg) {
             if (totalWeightKg >= 1000) {
                 const totalWeightTon = totalWeightKg / 1000;
@@ -861,6 +949,7 @@ function calculateResults() {
     </script>
 </body>
 </html>
+
 
 
 
