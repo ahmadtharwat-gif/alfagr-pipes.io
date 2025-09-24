@@ -30,8 +30,6 @@
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--dark);
-
-            /* animated gradient background */
             background: linear-gradient(-45deg, #1a237e, #303f9f, #00c853, #26a69a);
             background-size: 400% 400%;
             animation: gradientBG 12s ease infinite;
@@ -64,7 +62,6 @@
 
         .logo-container { margin-bottom: 14px; position: relative; z-index: 2; }
 
-        /* keep the same .logo element (background-image approach) so we don't touch logic */
         .logo {
             width: 150px;
             height: 150px;
@@ -74,7 +71,7 @@
             background-color: white;
             object-fit: cover;
             transition: var(--transition);
-            background-image: url('alfagr_logo.png'); /* ensure file alfagr_logo.png exists next to index.html */
+            background-image: url('alfagr_logo.png');
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -139,10 +136,9 @@
 
         .input-container { position: relative; margin-bottom: 6px; }
 
-        /* inputs keep the left padding for icons (preserve original UX) */
         select, input {
             width: 100%;
-            padding: 12px 16px 12px 50px; /* left padding preserved for icon */
+            padding: 12px 16px 12px 50px;
             border: 2px solid #e9e9e9;
             border-radius: 10px;
             font-size: 15px;
@@ -179,7 +175,6 @@
             z-index: 2;
         }
 
-        /* animated underline on focus (keeps original behavior) */
         .input-container::after {
             content: "";
             position: absolute;
@@ -192,7 +187,6 @@
         }
         .input-container:focus-within::after { width: 100%; }
 
-        /* Results */
         .results-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -228,27 +222,22 @@
         .result-value { font-size: 22px; font-weight: 800; color: var(--primary-dark); }
         .result-unit { display:block; margin-top:6px; color:var(--gray); font-size:12px; }
 
-        /* Footer */
         .footer { text-align:center; padding:16px; background: #f6f7f9; color: #666; font-size:14px; border-top: 1px solid #eee; }
 
-        /* small helpers */
         .required::after { content: "*"; color: var(--accent); margin-left: 6px; font-weight:700; font-size:12px; vertical-align:super; }
 
-        /* ================== ANIMATIONS & REVEAL ================== */
         @keyframes fadeIn { from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
         @keyframes zoomIn { from{transform:scale(.6); opacity:0;} to{transform:scale(1); opacity:1;} }
         @keyframes slideUp { from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
         .reveal { opacity:1 !important; transform:translateY(0) !important; }
 
-        /* ================== RESPONSIVE ================== */
         @media (max-width: 880px) {
             .container { max-width: 100%; border-radius: 12px; }
             h1 { font-size: 22px; }
             .logo { width: 100px; height: 100px; }
         }
 
-        /* ================== SCROLLBAR (nice touch) ================== */
         ::-webkit-scrollbar { width: 8px; height:8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
@@ -267,7 +256,6 @@
         </div>
 
         <div class="content">
-            <!-- ORIGINAL FORM (kept intact, only visuals changed) -->
             <div class="form-section">
                 <div class="section-title">
                     <i class="fas fa-cog"></i>
@@ -275,9 +263,8 @@
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <div>
-<label for="pipeType" class="required">Pipe Type:</label>
-                            <small>Select between Unplasticized Polyvinyl Chloride (U.PVC) and High-Density Polyethylene (HDPE)</small>
+                        <label for="pipeType" class="required">Pipe Type:</label>
+                        <small>Select between Unplasticized Polyvinyl Chloride (U.PVC) and High-Density Polyethylene (HDPE)</small>
                         <div class="input-container">
                             <i class="fas fa-pipe input-icon"></i>
                             <select id="pipeType">
@@ -285,6 +272,7 @@
                                 <option value="pvc">U.PVC</option>
                                 <option value="hdpe">HDPE</option>
                             </select>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -368,7 +356,6 @@
         </div>
     </div>
 
-    <!-- ================== ORIGINAL DATA + LOGIC (UNCHANGED) ================== -->
     <script>
         const pipeData = {
             pvc: {
@@ -691,7 +678,6 @@
             }
         };
 
-        /* ----------------- DOM refs (kept as in your original) ----------------- */
         const pipeTypeSelect = document.getElementById('pipeType');
         const diameterInput = document.getElementById('diameterInput');
         const diameterList = document.getElementById('diameterList');
@@ -705,189 +691,99 @@
         const totalWeightUnit = document.getElementById('totalWeightUnit');
         const specificationInput = document.getElementById('specification');
 
-        /* ----------------- logic functions (UNCHANGED) ----------------- */
-function populateDiameters() {
-    const selectedType = pipeTypeSelect.value;
-    diameterList.innerHTML = '';
-    pressureList.innerHTML = '';
-    diameterInput.value = '';
-    pressureInput.value = '';
-    specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
-    calculateResults();
-    
-    if (!selectedType) {
-        return;
-    }
-    const allDiameters = new Set();
-    for (const pressure in pipeData[selectedType].data) {
-        pipeData[selectedType].data[pressure].forEach(item => {
-            allDiameters.add(`${item.diameter} ${item.diameter_unit}`);
-        });
-    }
-    
-    const sortedDiameters = Array.from(allDiameters).sort((a, b) => {
-        const aValue = parseFloat(a.split(' ')[0]);
-        const bValue = parseFloat(b.split(' ')[0]);
-        return aValue - bValue;
-    });
-    
-    sortedDiameters.forEach(d => {
-        const option = document.createElement('option');
-        option.value = d;
-        diameterList.appendChild(option);
-    });
-}
-
----
-
-function populatePressures() {
-    const selectedType = pipeTypeSelect.value;
-    const selectedDiameterWithUnit = diameterInput.value;
-    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
-
-    pressureList.innerHTML = '';
-    pressureInput.value = '';
-    calculateResults();
-    
-    if (!selectedType || isNaN(diameterValue)) {
-        return;
-    }
-    const availablePressures = new Set();
-    for (const pressure in pipeData[selectedType].data) {
-        const hasDiameter = pipeData[selectedType].data[pressure].some(item => item.diameter === diameterValue);
-        if (hasDiameter) {
-            availablePressures.add(parseFloat(pressure));
-        }
-    }
-    
-    const sortedPressures = Array.from(availablePressures).sort((a, b) => b - a);
-
-    sortedPressures.forEach(p => {
-        const option = document.createElement('option');
-        option.value = `${p} bar`;
-        pressureList.appendChild(option);
-    });
-}
-
----
-
-function calculateResults() {
-    const selectedType = pipeTypeSelect.value;
-    const selectedDiameterWithUnit = diameterInput.value;
-    const selectedPressureWithUnit = pressureInput.value;
-
-    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
-    const pressureValue = parseFloat(selectedPressureWithUnit.split(' ')[0]);
-    const quantity = parseFloat(quantityInput.value) || 0;
-
-    thicknessResult.textContent = '--';
-    weightPerMeterResult.textContent = '--';
-    totalWeightResult.textContent = '--';
-    totalWeightUnit.textContent = 'kg';
-    thicknessUnit.textContent = 'mm';
-
-    if (selectedType && !isNaN(diameterValue) && !isNaN(pressureValue)) {
-        const pipeInfo = pipeData[selectedType].data[pressureValue]?.find(item => item.diameter === diameterValue);
-        
-        if (pipeInfo) {
-            thicknessResult.textContent = pipeInfo.thickness.toFixed(pipeInfo.thickness_unit === 'inch' ? 2 : 2);
-            thicknessUnit.textContent = pipeInfo.thickness_unit;
-            weightPerMeterResult.textContent = pipeInfo.weight.toFixed(3);
-function populateDiameters() {
-    const selectedType = pipeTypeSelect.value;
-    diameterList.innerHTML = '';
-    pressureList.innerHTML = '';
-    diameterInput.value = '';
-    pressureInput.value = '';
-    specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
-    calculateResults();
-    
-    if (!selectedType) {
-        return;
-    }
-
-    const allDiameters = new Set();
-    for (const pressure in pipeData[selectedType].data) {
-        pipeData[selectedType].data[pressure].forEach(item => {
-            allDiameters.add(`${item.diameter} ${item.diameter_unit}`);
-        });
-    }
-    
-    const sortedDiameters = Array.from(allDiameters).sort((a, b) => {
-        const aValue = parseFloat(a.split(' ')[0]);
-        const bValue = parseFloat(b.split(' ')[0]);
-        return aValue - bValue;
-    });
-    
-    sortedDiameters.forEach(d => {
-        const option = document.createElement('option');
-        option.value = d;
-        diameterList.appendChild(option);
-    });
-}
----
-function populatePressures() {
-    const selectedType = pipeTypeSelect.value;
-    // هنا يتم تحويل القيمة المدخلة من "200 mm" إلى الرقم 200
-    const selectedDiameterWithUnit = diameterInput.value;
-    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
-
-    pressureList.innerHTML = '';
-    pressureInput.value = '';
-    calculateResults();
-    
-    if (!selectedType || isNaN(diameterValue)) {
-        return;
-    }
-
-    const availablePressures = new Set();
-    for (const pressure in pipeData[selectedType].data) {
-        // البحث عن القيمة الرقمية فقط
-        const hasDiameter = pipeData[selectedType].data[pressure].some(item => item.diameter === diameterValue);
-        if (hasDiameter) {
-            availablePressures.add(parseFloat(pressure));
-        }
-    }
-    
-    const sortedPressures = Array.from(availablePressures).sort((a, b) => b - a);
-
-    sortedPressures.forEach(p => {
-        const option = document.createElement('option');
-        option.value = `${p} bar`;
-        pressureList.appendChild(option);
-    });
-}
----
-function calculateResults() {
-    const selectedType = pipeTypeSelect.value;
-    const selectedDiameterWithUnit = diameterInput.value;
-    const selectedPressureWithUnit = pressureInput.value;
-    
-    // هنا يتم تحويل القيمتين إلى أرقام
-    const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
-    const pressureValue = parseFloat(selectedPressureWithUnit.split(' ')[0]);
-    const quantity = parseFloat(quantityInput.value) || 0;
-
-    thicknessResult.textContent = '--';
-    weightPerMeterResult.textContent = '--';
-    totalWeightResult.textContent = '--';
-    totalWeightUnit.textContent = 'kg';
-    thicknessUnit.textContent = 'mm';
-
-    if (selectedType && !isNaN(diameterValue) && !isNaN(pressureValue)) {
-        // البحث باستخدام القيم الرقمية
-        const pipeInfo = pipeData[selectedType].data[pressureValue]?.find(item => item.diameter === diameterValue);
-        
-        if (pipeInfo) {
-            thicknessResult.textContent = pipeInfo.thickness.toFixed(pipeInfo.thickness_unit === 'inch' ? 2 : 2);
-            thicknessUnit.textContent = pipeInfo.thickness_unit;
-            weightPerMeterResult.textContent = pipeInfo.weight.toFixed(3);
+        // الدوال التي تم تعديلها لتصبح متكاملة
+        function populateDiameters() {
+            const selectedType = pipeTypeSelect.value;
+            diameterList.innerHTML = '';
+            pressureList.innerHTML = '';
+            diameterInput.value = '';
+            pressureInput.value = '';
+            specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
+            calculateResults();
             
-            const totalWeightKg = pipeInfo.weight * quantity;
-            updateTotalWeightDisplay(totalWeightKg);
+            if (!selectedType) {
+                return;
+            }
+
+            const allDiameters = new Set();
+            for (const pressure in pipeData[selectedType].data) {
+                pipeData[selectedType].data[pressure].forEach(item => {
+                    allDiameters.add(`${item.diameter} ${item.diameter_unit}`);
+                });
+            }
+            
+            const sortedDiameters = Array.from(allDiameters).sort((a, b) => {
+                const aValue = parseFloat(a.split(' ')[0]);
+                const bValue = parseFloat(b.split(' ')[0]);
+                return aValue - bValue;
+            });
+            
+            sortedDiameters.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d;
+                diameterList.appendChild(option);
+            });
         }
-    }
-}
+        
+        function populatePressures() {
+            const selectedType = pipeTypeSelect.value;
+            const selectedDiameterWithUnit = diameterInput.value;
+            const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
+
+            pressureList.innerHTML = '';
+            pressureInput.value = '';
+            calculateResults();
+            
+            if (!selectedType || isNaN(diameterValue)) {
+                return;
+            }
+
+            const availablePressures = new Set();
+            for (const pressure in pipeData[selectedType].data) {
+                const hasDiameter = pipeData[selectedType].data[pressure].some(item => item.diameter === diameterValue);
+                if (hasDiameter) {
+                    availablePressures.add(parseFloat(pressure));
+                }
+            }
+            
+            const sortedPressures = Array.from(availablePressures).sort((a, b) => b - a);
+
+            sortedPressures.forEach(p => {
+                const option = document.createElement('option');
+                option.value = `${p} bar`;
+                pressureList.appendChild(option);
+            });
+        }
+
+        function calculateResults() {
+            const selectedType = pipeTypeSelect.value;
+            const selectedDiameterWithUnit = diameterInput.value;
+            const selectedPressureWithUnit = pressureInput.value;
+            
+            const diameterValue = parseFloat(selectedDiameterWithUnit.split(' ')[0]);
+            const pressureValue = parseFloat(selectedPressureWithUnit.split(' ')[0]);
+            const quantity = parseFloat(quantityInput.value) || 0;
+
+            thicknessResult.textContent = '--';
+            weightPerMeterResult.textContent = '--';
+            totalWeightResult.textContent = '--';
+            totalWeightUnit.textContent = 'kg';
+            thicknessUnit.textContent = 'mm';
+
+            if (selectedType && !isNaN(diameterValue) && !isNaN(pressureValue)) {
+                const pipeInfo = pipeData[selectedType].data[pressureValue]?.find(item => item.diameter === diameterValue);
+                
+                if (pipeInfo) {
+                    thicknessResult.textContent = pipeInfo.thickness.toFixed(pipeInfo.thickness_unit === 'inch' ? 2 : 2);
+                    thicknessUnit.textContent = pipeInfo.thickness_unit;
+                    weightPerMeterResult.textContent = pipeInfo.weight.toFixed(3);
+                    
+                    const totalWeightKg = pipeInfo.weight * quantity;
+                    updateTotalWeightDisplay(totalWeightKg);
+                }
+            }
+        }
+        
         function updateTotalWeightDisplay(totalWeightKg) {
             if (totalWeightKg >= 1000) {
                 const totalWeightTon = totalWeightKg / 1000;
@@ -928,7 +824,6 @@ function calculateResults() {
         populateDiameters();
     </script>
 
-    <!-- ================== SCROLL REVEAL (UI only) ================== -->
     <script>
       (function(){
         const reveals = document.querySelectorAll('.section-title, .result-card');
@@ -943,30 +838,8 @@ function calculateResults() {
         window.addEventListener('scroll', handleReveal, {passive:true});
         window.addEventListener('resize', handleReveal);
         window.addEventListener('load', handleReveal);
-        // initial run in case some elements are already in view
         handleReveal();
       })();
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
