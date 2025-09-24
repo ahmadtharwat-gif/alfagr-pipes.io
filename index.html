@@ -708,8 +708,8 @@
         /* ----------------- logic functions (UNCHANGED) ----------------- */
         function populateDiameters() {
             const selectedType = pipeTypeSelect.value;
-            diameterList.innerHTML = '';
-            pressureList.innerHTML = '';
+            diameterList.innerHTML = "<option value=''>-- Select Diameter --</option>";
+            pressureList.innerHTML = "<option value=''>-- Select Pressure --</option>";
             diameterInput.value = '';
             pressureInput.value = '';
             specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
@@ -857,6 +857,7 @@
     </script>
 </body>
 </html>
+
 
 
 
