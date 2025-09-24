@@ -706,8 +706,20 @@
         const specificationInput = document.getElementById('specification');
 
         /* ----------------- logic functions (UNCHANGED) ----------------- */
-        بص الكود بتاع القطر كامل اهو عدله 
-const allDiameters = new Set();
+function populateDiameters() {
+    const selectedType = pipeTypeSelect.value;
+    diameterList.innerHTML = "<option value=''>-- Select Diameter --</option>";
+    pressureList.innerHTML = "<option value=''>-- Select Pressure --</option>";
+
+    diameterInput.value = '';
+    pressureInput.value = '';
+    specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
+    calculateResults();
+    
+    if (!selectedType) {
+        return;
+    }
+        const allDiameters = new Set();
             for (const pressure in pipeData[selectedType].data) {
                 pipeData[selectedType].data[pressure].forEach(item => {
                     allDiameters.add(JSON.stringify({
@@ -845,6 +857,7 @@ const allDiameters = new Set();
     </script>
 </body>
 </html>
+
 
 
 
