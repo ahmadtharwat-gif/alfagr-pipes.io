@@ -707,38 +707,38 @@
 
         /* ----------------- logic functions (UNCHANGED) ----------------- */
         function populateDiameters() {
-        function populateDiameters() {
-    const selectedType = pipeTypeSelect.value;
-    diameterList.innerHTML = '';
-    pressureList.innerHTML = '';
-    diameterInput.value = '';
-    pressureInput.value = '';
-    specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
-    calculateResults();
-    
-    if (!selectedType) {
-        return;
-    }
+            const selectedType = pipeTypeSelect.value;
+            diameterList.innerHTML = "<option value=''>-- Select Diameter --</option>";
+            pressureList.innerHTML = "<option value=''>-- Select Pressure --</option>";
+            diameterInput.value = '';
+            pressureInput.value = '';
+            specificationInput.value = selectedType ? pipeData[selectedType].spec : '';
+            calculateResults();
+            
+            if (!selectedType) {
+                return;
+            }
 
-    const allDiameters = new Set();
-    for (const pressure in pipeData[selectedType].data) {
-        pipeData[selectedType].data[pressure].forEach(item => {
-            allDiameters.add(`${item.diameter} ${item.diameter_unit}`);
-        });
-    }
-    
-    const sortedDiameters = Array.from(allDiameters).sort((a, b) => {
-        const aValue = parseFloat(a.split(' ')[0]);
-        const bValue = parseFloat(b.split(' ')[0]);
-        return aValue - bValue;
-    });
-    
-    sortedDiameters.forEach(d => {
-        const option = document.createElement('option');
-        option.value = d;
-        option.textContent = d;
-        diameterList.appendChild(option);
-    });
+            const allDiameters = new Set();
+            for (const pressure in pipeData[selectedType].data) {
+                pipeData[selectedType].data[pressure].forEach(item => {
+                    allDiameters.add(JSON.stringify({
+                        value: item.diameter,
+                        unit: item.diameter_unit
+                    }));
+                });
+            }
+            
+            const parsed = Array.from(allDiameters).map(s => JSON.parse(s));
+            const sortedDiameters = parsed.sort((a, b) => a.value - b.value);
+            
+            sortedDiameters.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d.value;
+                option.textContent = `${d.value} ${d.unit}`;
+                diameterList.appendChild(option);
+            });
+        }
 }
 
         function populatePressures() {
@@ -858,6 +858,7 @@
     </script>
 </body>
 </html>
+
 
 
 
