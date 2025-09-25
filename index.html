@@ -281,7 +281,7 @@
             <div class="logo-container">
                 <div class="logo"></div>
                 <h1>AL FAGR CO. For Plastic Pipes Industry</h1>
-                <h2>u-PVC - HDPE | Advanced Technical Specification System</h2>
+                <h2>u-PVC - HDPE - PPR | Advanced Technical Specification System</h2>
             </div>
         </div>
 
@@ -294,20 +294,21 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="pipeType" class="required">Pipe Type:</label>
-                        <small>Select between Unplasticized Polyvinyl Chloride (U.PVC) and High-Density Polyethylene (HDPE)</small>
+                        <small>Unplasticized Polyvinyl Chloride(u.PVC), High-Density Polyethylene(HDPE)and polyproplyne(PPR)(</small>
                         <div class="input-container">
                             <i class="fas fa-pipe input-icon"></i>
                             <select id="pipeType">
                                 <option value="">Select pipe type</option>
                                 <option value="pvc">U.PVC</option>
                                 <option value="hdpe">HDPE</option>
+                                <option value="ppr">PPR</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="diameterInput" class="required">Outer Diameter:</label>
-                        <small>Select between 10 mm to 800 mm outer diameter for U.PVC, and 20 mm to 1200 mm for HDPE</small>
+                        <small>Select the outer diameter (all diameters according to german DIN specifications</small>
                         <div class="input-container">
                             <i class="fas fa-ruler input-icon"></i>
                             <input type="text" id="diameterInput" list="diameterList" placeholder="Search or select diameter">
@@ -717,9 +718,47 @@
                         { diameter: 1200, thickness: 29.4, weight: 108.000, thickness_unit: 'mm', diameter_unit: 'mm' }
                     ]
                 }
+             },
+             ppr: {
+                spec: 'DIN 8077/8078',
+                data: {
+                    '10': [
+                        { diameter: 20, thickness: 1.9, weight: 0.107, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 25, thickness: 2.3, weight: 0.164, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 32, thickness: 2.9, weight: 0.261, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 40, thickness: 3.7, weight: 0.412, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 50, thickness: 4.6, weight: 0.638, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 63, thickness: 5.8, weight: 1.010, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 75, thickness: 6.8, weight: 1.410, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 90, thickness: 8.2, weight: 2.030, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 110, thickness: 10.0, weight: 3.010, thickness_unit: 'mm', diameter_unit: 'mm' }
+                        
+                    ],
+                    '16': [
+                        { diameter: 20, thickness: 2.8, weight: 0.148, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 25, thickness: 3.5, weight: 0.230, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 32, thickness: 4.4, weight: 0.370, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 40, thickness: 5.5, weight: 0.575, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 50, thickness: 6.9, weight: 0.896, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 63, thickness: 8.6, weight: 1.410, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 75, thickness: 10.3, weight: 2.010, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 90, thickness: 12.3, weight: 2.870, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 110, thickness: 15.1, weight: 4.300, thickness_unit: 'mm', diameter_unit: 'mm' }
+                    ],
+                    '20': [
+                        { diameter: 20, thickness: 3.4, weight: 0.172, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 25, thickness: 4.2, weight: 0.266, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 32, thickness: 5.4, weight: 0.434, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 40, thickness: 6.7, weight: 0.671, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 50, thickness: 8.3, weight: 1.040, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 63, thickness: 10.5, weight: 1.650, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 75, thickness: 12.5, weight: 2.340, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 90, thickness: 15.0, weight: 3.360, thickness_unit: 'mm', diameter_unit: 'mm' },
+                        { diameter: 110, thickness: 18.3, weight: 5.010, thickness_unit: 'mm', diameter_unit: 'mm' }
+                    ],
+               }
             }
         };
-
         const pipeTypeSelect = document.getElementById('pipeType');
         const diameterInput = document.getElementById('diameterInput');
         const diameterList = document.getElementById('diameterList');
@@ -950,5 +989,4 @@
     </script>
 </body>
 </html>
-
 
